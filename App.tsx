@@ -10,6 +10,16 @@ const App: React.FC = () => {
   const [lineHeight, setLineHeight] = useState(0);
   const [activeSection, setActiveSection] = useState<string>('education');
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -94,6 +104,17 @@ const App: React.FC = () => {
                 opacity: isDarkMode ? 0.6 : 0.8
             }}
         ></div>
+        
+        {/* Mouse Spotlight Effect */}
+        <div 
+          className="absolute inset-0 transition-opacity duration-300"
+          style={{
+            background: isDarkMode 
+              ? `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(29, 78, 216, 0.15), transparent 80%)`
+              : `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 80%)`,
+          }}
+        ></div>
+
         <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${isDarkMode ? 'via-[#050505]/50 to-[#050505]' : 'via-white/50 to-white'} opacity-80 transition-colors duration-300`}></div>
       </div>
 
